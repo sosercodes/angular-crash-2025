@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { NgStyle } from '@angular/common';
 
 @Component({
@@ -11,4 +11,9 @@ export class ButtonComponent {
 
   @Input() text!: string;
   @Input() color!: string;
+  @Output() btnClick = new EventEmitter();
+
+  onClick() {
+    this.btnClick.emit();
+  }
 }
