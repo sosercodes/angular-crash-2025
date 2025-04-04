@@ -1,5 +1,6 @@
 import { Component, importProvidersFrom } from '@angular/core';
 import { NgFor } from '@angular/common';
+import { Observable, of } from 'rxjs';
 import { Task } from '../../Task';
 import { TaskItemComponent } from '../task-item/task-item.component';
 import { TaskService } from '../../services/task.service';
@@ -17,6 +18,6 @@ export class TasksComponent {
   }
 
   ngOnInit() : void {
-    this.tasks = this.taskService.getTasks();
+    this.taskService.getTasks().subscribe( (t) => (this.tasks = t));
   }
 }
