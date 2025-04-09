@@ -188,3 +188,117 @@ The parent listens via `(addClicked)="handleAdd()"`.
 - The parent listens via `(addClicked)="handleAdd()"`.
 
 
+### **What is `ngClass`?**
+
+In Angular, the `ngClass` directive is a powerful tool for dynamically adding or removing CSS classes on HTML elements based on specific conditions or expressions. This allows developers to create highly interactive and responsive user interfaces. Below is an explanation of how to use `ngClass`, along with examples and common use cases.
+
+`ngClass` is a directive in Angular that binds an element's class attribute to expressions in your component. These expressions determine which classes should be applied or removed dynamically based on the state of the application or user interactions.
+
+The basic syntax of `ngClass` is:
+```html
+<div [ngClass]="{'class-name': condition}">
+  <!-- Content -->
+</div>
+```
+- `'class-name'`: The CSS class you want to apply.
+- `condition`: A boolean expression that determines whether the class should be applied.
+
+### Angulars `HttpClient` 🔥 
+
+Angular's `HttpClient` is a built-in module from the `@angular/common/http` package used for making HTTP requests in Angular applications. It simplifies communication with backend services by providing methods for various HTTP operations like GET, POST, PUT, DELETE, etc., and supports RxJS Observables for handling asynchronous data streams.
+
+#### Setting Up HttpClient
+1. Import `HttpClientModule` in your application's main module (e.g., `AppModule`):
+   ```typescript
+   import { HttpClientModule } from '@angular/common/http';
+
+   @NgModule({
+     imports: [HttpClientModule],
+     bootstrap: [AppComponent]
+   })
+   export class AppModule {}
+   ```
+2. Inject the `HttpClient` service into components or services:
+   ```typescript
+   import { HttpClient } from '@angular/common/http';
+
+   constructor(private http: HttpClient) {}
+   ```
+
+#### **GET**
+Fetches data from a server.
+```typescript
+this.http.get('http://example.com/api/items').subscribe(data => {
+  console.log(data);
+});
+```
+Supports query parameters using `HttpParams`:
+```typescript
+import { HttpParams } from '@angular/common/http';
+let params = new HttpParams().set('key', 'value');
+this.http.get('http://example.com/api/items', { params }).subscribe(data => {
+  console.log(data);
+});
+```
+
+#### **POST**
+Sends data to the server to create a new resource.
+```typescript
+let item = { name: 'new item' };
+this.http.post('http://example.com/api/items', item).subscribe(data => {
+  console.log(data);
+});
+```
+
+#### **PUT**
+Updates an existing resource on the server.
+```typescript
+let updatedItem = { name: 'updated item' };
+this.http.put('http://example.com/api/items/1', updatedItem).subscribe(data => {
+  console.log(data);
+});
+```
+
+#### **DELETE**
+Deletes a resource from the server.
+```typescript
+this.http.delete('http://example.com/api/items/1').subscribe(data => {
+  console.log(data);
+});
+```
+
+#### **Custom Headers**
+You can send specific headers using `HttpHeaders`:
+```typescript
+import { HttpHeaders } from '@angular/common/http';
+const headers = new HttpHeaders().set('Content-Type', 'application/json');
+this.http.get('http://example.com/api/items', { headers }).subscribe(data => {
+  console.log(data);
+});
+```
+
+#### **Observables and RxJS Operators**
+Use RxJS operators to transform or handle errors:
+```typescript
+import { retry } from 'rxjs/operators';
+this.http.get('http://example.com/api/items')
+  .pipe(retry(3))
+  .subscribe(
+    data => console.log(data),
+    error => console.error(error)
+  );
+```
+
+#### **Full Response**
+Retrieve the full HTTP response (headers, status code) using the `observe` option:
+```typescript
+this.http.get('http://example.com/api/items', { observe: 'response' }).subscribe(response => {
+  console.log(response.status);
+  console.log(response.headers.get('Content-Type'));
+});
+```
+
+#### Best Practices
+- Use Angular services to encapsulate HTTP logic for better code organization.
+- Handle errors gracefully using RxJS operators like `catchError`.
+- Use interceptors for adding authentication tokens or logging requests.
