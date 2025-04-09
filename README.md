@@ -79,6 +79,49 @@ The Angular code snippet `<p *ngFor="let task of tasks">{{ task.text }}</p>` dem
    - For each item in the `tasks` array, Angular creates a new  element.
    - Inside each `` element, the value of `task.text` (a property of each object in the `tasks` array) is displayed.
 
+### The `ngModule` directive
+
+
+In Angular, `[(ngModel)]` is a directive used for **two-way data binding**, allowing synchronization between the UI (view) and the component (model). It combines **property binding** (`[ngModel]`) and **event binding** (`(ngModelChange)`), enabling updates in both directions: from the component to the view and vice versa.
+
+#### Syntax
+
+The syntax `[(ngModel)]` uses a combination of square brackets (`[]`) for property binding and parentheses (`()`) for event binding, often referred to as "banana-in-a-box" (`[()]`) in the Angular community.
+
+#### How it Works
+1. **Property Binding** (`[ngModel]`): Updates the view with the value from the component.
+2. **Event Binding** (`(ngModelChange)`): Listens for changes in the view and updates the component accordingly.
+3. Together, `[(ngModel)]` ensures that changes in either the view or the component are reflected in both places.
+
+
+**Configuration**
+
+In order to use `[(ngModel)]` in your `.html` file you have to import `import { FormsModule } from '@angular/forms'` and add it to `imports: [FormsModule]`. 
+```ts
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+@Component({
+  selector: 'app-add-task',
+  imports: [FormsModule],
+  templateUrl: './add-task.component.html',
+  styleUrl: './add-task.component.css'
+})
+export class AddTaskComponent {
+
+  text!: string;
+  day!: string;
+  reminder: boolean = false;
+
+}
+```
+
+
+---
+
+
+
+
 
 ### How to include Fontawsome
 
@@ -149,43 +192,49 @@ import { Component, Output, EventEmitter } from '@angular/core';
   selector: 'app-child',
 })
 export class ButtonComponent {
-  @Output() addClicked = new EventEmitter<void>();
+  @Output() taskEvent = new EventEmitter<string>();
+
+  sendTask() {
+    const task = 'New Task';
+    this.taskEvent.emit(task); // Emits 'New Task' to the parent
+  }
+  @Output() addClicked = new EventEmitter<string>();
   onClick() {
-    this.addClicked.emit();  // This sends an event to the parent
+    const message = 'Button clicked!';
+    this.addClicked.emit(message);  // Emits message to parent
   }
 }
 ```
 
 - `@Output()` marks `addClicked` as an event the parent can subscribe to.
-- `addClicked.emit()` fires the event.
+- `addClicked.emit(message)` fires the event.
 
 ##### **Parent Component (`parent.component.html`)** needs a listener
 
-In the parent Component you have to add the `(addClicked)="handleAdd()"` to the `parent.component.html`.
+The parent component listens for this event using  `(addClicked)="handleAdd(message: string)"` in the `parent.component.html`.
 
 ```html
-<app-button (addClicked)="handleAdd()"></app-button>
+<app-button (addClicked)="handleAdd($event)"></app-button>
 ```
 
 ##### **Parent Component (`parent.component.ts`)** handles it
 
+The parent listens via `handleAdd(message: string)`.
+
 ```ts
 export class ParentComponent {
-  handleAdd() {
-    console.log('Add button clicked in child!');
+  handleAdd(message: string) {
+    console.log(message);
     // Do something like add an item to a list
   }
 }
 ```
 
-The parent listens via `(addClicked)="handleAdd()"`.
-
-
 #### 🧠 In Short
 
 - `<button (click)="onClick()">Add</button>` triggers a method.
 - That method uses `EventEmitter` to notify the parent.
-- The parent listens via `(addClicked)="handleAdd()"`.
+- The parent listens via `(addClicked)="handleAdd($event)"`.
 
 
 ### **What is `ngClass`?**
@@ -208,6 +257,9 @@ The basic syntax of `ngClass` is:
 Angular's `HttpClient` is a built-in module from the `@angular/common/http` package used for making HTTP requests in Angular applications. It simplifies communication with backend services by providing methods for various HTTP operations like GET, POST, PUT, DELETE, etc., and supports RxJS Observables for handling asynchronous data streams.
 
 #### Setting Up HttpClient
+
+Angular Documentation for [Setting Up HttpClient](https://angular.dev/guide/http/setup).
+
 1. Import `HttpClientModule` in your application's main module (e.g., `AppModule`):
    ```typescript
    import { HttpClientModule } from '@angular/common/http';
