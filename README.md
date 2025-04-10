@@ -354,3 +354,48 @@ this.http.get('http://example.com/api/items', { observe: 'response' }).subscribe
 - Use Angular services to encapsulate HTTP logic for better code organization.
 - Handle errors gracefully using RxJS operators like `catchError`.
 - Use interceptors for adding authentication tokens or logging requests.
+
+
+
+### What's the use case for subjects?
+
+In his article [ncjamieson: RxJS: Understanding Subjects](https://ncjamieson.com/understanding-subjects/) says:
+
+>_..., but for now it's enough to know that it involves taking the notifications from a single, source observable and forwarding them to one or more destination observers._
+>
+>_This connecting of observers to an observable is what subjects are all about.
+They're able to do it because subjects themselves are both observers and observables._
+
+#### Subject
+
+In order to use `Subjects` and `Observable`s you first need to create a `Subject`.
+
+```ts
+  private subject = new Subject<any>();
+```
+
+Since the Observers need a possility to subscribe, we need a method to get the `Observable`.
+
+```ts
+  onToggle(): Observable<any> {
+    return this.subject.asObservable();
+  }
+```
+
+If you want to fire the event.
+
+```ts
+this.subject.next(this.showAddTask);
+```
+
+Components/Observers can register/subscribe to the Subject by using a `Subscription`.
+
+```ts
+  subscription!: Subscription;
+
+  constructor(private uiService: UiService) {
+    this.subscription = this.uiService
+      .onToggle()
+      .subscribe((value) => (this.showAddTask = value));
+  }
+```
