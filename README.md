@@ -1,10 +1,22 @@
-# AngularCrash
+# Angular Crash Course - 2025
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.6.
+This project is based upon [Angular Crash Course - Traversy Media](https://www.youtube.com/watch?v=3dHNOWTI7H8) from 2021 but uses Angular version 19.2.6.
+
+<img src="task-tracker.png" alt="drawing" width="70%"/>
+
+---
 
 ## Development
 
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.6.
+
 ### Development server
+
+First things first, you need to start Json-Server since this project uses that:
+
+```bash
+npm run server
+```
 
 To start a local development server, run:
 
@@ -13,6 +25,7 @@ ng serve
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+
 
 ### Code scaffolding
 
@@ -46,7 +59,7 @@ To execute unit tests with the [Karma](https://karma-runner.github.io) test runn
 ng test
 ```
 
-## Running end-to-end tests
+### Running end-to-end tests
 
 For end-to-end (e2e) testing, run:
 
@@ -56,14 +69,11 @@ ng e2e
 
 Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
-### Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
 
 ## The Task Tracker App
 
-
-### The `*ngFor` directive
+### The `ngFor` directive
 
 The Angular code snippet `<p *ngFor="let task of tasks">{{ task.text }}</p>` demonstrates how to use the `*ngFor` directive to dynamically generate HTML elements based on an array of data. Here's a breakdown of its functionality:
 
@@ -79,16 +89,15 @@ The Angular code snippet `<p *ngFor="let task of tasks">{{ task.text }}</p>` dem
    - For each item in the `tasks` array, Angular creates a new  element.
    - Inside each `` element, the value of `task.text` (a property of each object in the `tasks` array) is displayed.
 
-### The `ngModule` directive
+### The `ngModel` directive
 
 
 In Angular, `[(ngModel)]` is a directive used for **two-way data binding**, allowing synchronization between the UI (view) and the component (model). It combines **property binding** (`[ngModel]`) and **event binding** (`(ngModelChange)`), enabling updates in both directions: from the component to the view and vice versa.
 
-#### Syntax
-
 The syntax `[(ngModel)]` uses a combination of square brackets (`[]`) for property binding and parentheses (`()`) for event binding, often referred to as "banana-in-a-box" (`[()]`) in the Angular community.
 
-#### How it Works
+**How it Works**
+
 1. **Property Binding** (`[ngModel]`): Updates the view with the value from the component.
 2. **Event Binding** (`(ngModelChange)`): Listens for changes in the view and updates the component accordingly.
 3. Together, `[(ngModel)]` ensures that changes in either the view or the component are reflected in both places.
@@ -119,15 +128,30 @@ export class AddTaskComponent {
 
 ---
 
+### The `ngClass` directive
+
+In Angular, the `ngClass` directive is a powerful tool for dynamically adding or removing CSS classes on HTML elements based on specific conditions or expressions. This allows developers to create highly interactive and responsive user interfaces. Below is an explanation of how to use `ngClass`, along with examples and common use cases.
+
+`ngClass` is a directive in Angular that binds an element's class attribute to expressions in your component. These expressions determine which classes should be applied or removed dynamically based on the state of the application or user interactions.
+
+The basic syntax of `ngClass` is:
+```html
+<div [ngClass]="{'class-name': condition}">
+  <!-- Content -->
+</div>
+```
+- `'class-name'`: The CSS class you want to apply.
+- `condition`: A boolean expression that determines whether the class should be applied.
 
 
+---
 
 
-### How to include Fontawsome
+### How to include Font Awsome
 
 **Install Required Packages**
 
-Run the following command in your terminal to install Font Awesome.
+Run the following command in your terminal to install Font Awesome icons.
 
 ```bash
 ng add @fortawesome/angular-fontawesome
@@ -236,21 +260,8 @@ export class ParentComponent {
 - That method uses `EventEmitter` to notify the parent.
 - The parent listens via `(addClicked)="handleAdd($event)"`.
 
+---
 
-### **What is `ngClass`?**
-
-In Angular, the `ngClass` directive is a powerful tool for dynamically adding or removing CSS classes on HTML elements based on specific conditions or expressions. This allows developers to create highly interactive and responsive user interfaces. Below is an explanation of how to use `ngClass`, along with examples and common use cases.
-
-`ngClass` is a directive in Angular that binds an element's class attribute to expressions in your component. These expressions determine which classes should be applied or removed dynamically based on the state of the application or user interactions.
-
-The basic syntax of `ngClass` is:
-```html
-<div [ngClass]="{'class-name': condition}">
-  <!-- Content -->
-</div>
-```
-- `'class-name'`: The CSS class you want to apply.
-- `condition`: A boolean expression that determines whether the class should be applied.
 
 ### Angulars `HttpClient` 🔥 
 
@@ -355,9 +366,9 @@ this.http.get('http://example.com/api/items', { observe: 'response' }).subscribe
 - Handle errors gracefully using RxJS operators like `catchError`.
 - Use interceptors for adding authentication tokens or logging requests.
 
+---
 
-
-### What's the use case for subjects?
+### RxJS - Understanding `Subject`, `Observable`, and `Subscription`?
 
 In his article [ncjamieson: RxJS: Understanding Subjects](https://ncjamieson.com/understanding-subjects/) says:
 
@@ -398,4 +409,57 @@ Components/Observers can register/subscribe to the Subject by using a `Subscript
       .onToggle()
       .subscribe((value) => (this.showAddTask = value));
   }
+```
+
+---
+
+### Angular Router
+
+Configure your routes in `app.routes.ts`:
+
+```ts
+import { Routes } from '@angular/router';
+import { TasksComponent } from './components/tasks/tasks.component';
+import { AboutComponent } from './components/about/about.component';
+
+export const routes: Routes = [
+    {path: '', component: TasksComponent},
+    {path: 'about', component: AboutComponent},
+];
+```
+
+In your `app.component.html`:
+
+```html
+<div class="container">
+  <app-header></app-header>
+  <router-outlet></router-outlet>
+  <app-footer></app-footer>
+</div>
+```
+
+Create a link:
+
+```html
+<footer>
+    <p>Copyright &copy; 2021</p>
+    <a routerLink="/about">About</a>
+</footer>
+```
+
+And don't forget to import `RouterLink`:
+
+```ts
+import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
+
+@Component({
+  selector: 'app-footer',
+  imports: [RouterLink],
+  templateUrl: './footer.component.html',
+  styleUrl: './footer.component.css'
+})
+export class FooterComponent {
+
+}
 ```
